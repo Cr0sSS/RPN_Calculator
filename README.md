@@ -1,5 +1,5 @@
 # RPN_Calculator
-Calculator using Rear Polish Notation
+Calculator using Reverse Polish Notation
 
 Калькулятор, производящий вычисления на основе Обратной Польской Нотации (ОПН, RPN).
 
