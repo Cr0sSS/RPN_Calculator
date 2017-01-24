@@ -53,7 +53,6 @@ static NSString* const dotPointers = @".,";
             
         } else {
             if ([stack count] > 1) {
-
                 double secondOper = [[self popFromStack:stack] doubleValue];
                 double firstOper = [[self popFromStack:stack] doubleValue];
                 double newOper;
@@ -79,7 +78,12 @@ static NSString* const dotPointers = @".,";
         }
     }
     
-    double result = [[self peekFromStack:stack] doubleValue];
+    double result = [[self popFromStack:stack] doubleValue];
+    
+    if ([stack count]) {
+        [self postErrorMessage:@"Неверная запись выражения:\nПроверьте количество операндов и знаков операций"];
+    }
+    
     return result;
 }
 
@@ -142,6 +146,13 @@ static NSString* const dotPointers = @".,";
             symbolsBefore = [@"" mutableCopy];
         }
     }
+    
+    if ([[resultArray lastObject] isKindOfClass:[NSString class]]) {
+        if ([@"+-/*" containsString:[resultArray lastObject]]) {
+            [self postErrorMessage:@"Неверная запись выражения:\nВыражение не может заканчиваться знаком операции"];
+        }
+    }
+    
     return resultArray;
 }
 
