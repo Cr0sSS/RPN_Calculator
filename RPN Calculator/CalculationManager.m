@@ -64,6 +64,10 @@ static NSString* const dotPointers = @".,";
                     newOper = firstOper - secondOper;
                     
                 } else if ([token isEqual:@"/"]) {
+                    if (secondOper == 0.f) {
+                        [self postErrorMessage:@"Деление на ноль невозможно"];
+                    }
+                    
                     newOper = firstOper / secondOper;
                     
                 } else {
