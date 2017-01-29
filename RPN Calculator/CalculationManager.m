@@ -12,10 +12,10 @@
 
 static NSString* const allDigits = @"1234567890";
 static NSString* const dotPointers = @".,";
-
-static NSString* const mathOperators = @"-+*/";
 static NSMutableString* onlySymbols;
 
+// Добавить знак новой операции в конец строки
+static NSString* const mathOperators = @"-+*/^";
 
 + (CalculationManager*)sharedManager {
     static CalculationManager* manager = nil;
@@ -75,6 +75,12 @@ static NSMutableString* onlySymbols;
                     }
                     
                     newOper = firstOper / secondOper;
+                
+                /*
+                // Добавить реализацию для новой операции
+                } else if ([token isEqual:@"^"]) {
+                    newOper = pow(firstOper, secondOper);
+                */
                     
                 } else {
                     newOper = firstOper * secondOper;
@@ -146,14 +152,14 @@ static NSMutableString* onlySymbols;
                 symbolsBefore = [@"" mutableCopy];
             }
             
-        } else if ([@"+*/()" containsString:symbol]) {
+        } else if ([onlySymbols containsString:symbol]) {
             [self addOperator:symbol toArray:resultArray symbolsBefore:symbolsBefore];
             symbolsBefore = [@"" mutableCopy];
         }
     }
     
     if ([[resultArray lastObject] isKindOfClass:[NSString class]]) {
-        if ([@"+-/*" containsString:[resultArray lastObject]]) {
+        if ([mathOperators containsString:[resultArray lastObject]]) {
             [self postErrorMessage:@"Неверная запись выражения:\nВыражение не может заканчиваться знаком операции"];
         }
     }
@@ -175,33 +181,30 @@ static NSMutableString* onlySymbols;
         } else if ([token isKindOfClass:[NSString class]]) {
             NSString* tokenString = (NSString*)token;
             
-            if ([@"+-*/" containsString:tokenString]) {
+            if ([mathOperators containsString:tokenString]) {
                 
-                if ([stack count]) {
+                NSInteger count = [stack count];
+                for (NSInteger i = 0; i < count; i++) {
+                    NSString* stackString = [self peekFromStack:stack];
                     
-                    NSInteger maxStep = [stack count];
-                    for (NSInteger i = 0; i < maxStep; i++) {
-                        NSString* stackObj = [self peekFromStack:stack];
-                        
-                        if ([@"+-" containsString:tokenString] && [@"*/+-" containsString:stackObj]) {
-                            [outputQueue addObject:[self popFromStack:stack]];
-                            
-                        } else {
-                            break;
-                        }
+                    if ([self priorityOfOperator:tokenString] <= [self priorityOfOperator:stackString]) {
+                        [outputQueue addObject:[self popFromStack:stack]];
+
+                    } else {
+                        break;
                     }
                 }
+                
                 [self pushObject:token toStack:stack];
                 
             } else if ([tokenString isEqualToString:@"("]) {
                 [self pushObject:token toStack:stack];
                 
             } else {
-                //// Закрывающаяся скобка
-                if ([stack count]) {
-                    
-                    NSInteger maxStep = [stack count];
-                    for (NSInteger i = 0; i < maxStep; i++) {
+                //// Закрывающая скобка
+                NSInteger count = [stack count];
+                if (count) {
+                    for (NSInteger i = 0; i < count; i++) {
                         NSString* stackObj = [self peekFromStack:stack];
                         
                         if (![stackObj isEqualToString:@"("]) {
@@ -218,8 +221,9 @@ static NSMutableString* onlySymbols;
             }
         }
     }
-    NSInteger maxStep = [stack count];
-    for (NSInteger i = 0; i < maxStep; i++) {
+    
+    NSInteger count = [stack count];
+    for (NSInteger i = 0; i < count; i++) {
         NSString* stackObj = [self peekFromStack:stack];
         
         if ([stackObj isEqualToString:@"("]) {
@@ -250,6 +254,35 @@ static NSMutableString* onlySymbols;
     }
     
     [resultArray addObject:symbol];
+}
+
+
+- (NSInteger)priorityOfOperator:(NSString*)operator {
+    char operatorChar = [operator characterAtIndex:0];
+    
+    switch (operatorChar) {
+        case '(':
+            return 0;
+        case ')':
+            return 1;
+        case '+':
+            return 2;
+        case '-':
+            return 3;
+        case '*':
+            return 4;
+        case '/':
+            return 4;
+        
+        /*
+        // Добавить приоритет для новой операции
+        case '^':
+            return 5;
+        */
+            
+        default:
+            return INT_MAX;
+    }
 }
 
 
