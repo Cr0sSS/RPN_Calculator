@@ -8,21 +8,18 @@
 
 #import "ErrorController.h"
 
-@interface ErrorController ()
-
-@end
-
 @implementation ErrorController
 
-+ (ErrorController*)errorControllerWithMessage:(NSString*)message {
++ (void)errorControllerWithTitle:(NSString*)title message:(NSString*)message {
     
-    ErrorController* ec = [ErrorController alertControllerWithTitle:@"Ошибка"
-                                                                message:message
-                                                         preferredStyle:UIAlertControllerStyleAlert];
+    ErrorController* ec = [ErrorController alertControllerWithTitle:title
+                                                            message:message
+                                                     preferredStyle:UIAlertControllerStyleAlert];
     
-    [ec addAction:[UIAlertAction actionWithTitle:@"Закрыть" style:UIAlertActionStyleCancel handler:nil]];
+    [ec addAction:[UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleCancel handler:nil]];
     
-    return ec;
+    UIViewController* vc = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    [vc presentViewController:ec animated:YES completion:nil];
 }
 
 @end

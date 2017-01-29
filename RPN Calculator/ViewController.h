@@ -11,7 +11,6 @@
 @interface ViewController : UIViewController <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *mainTextField;
-
 @property (weak, nonatomic) IBOutlet UILabel *resultLabel;
 @property (weak, nonatomic) IBOutlet UILabel *rpnLabel;
 
@@ -20,4 +19,3 @@
 - (IBAction)symbolButtonPress:(UIButton *)sender;
 
 @end
-
