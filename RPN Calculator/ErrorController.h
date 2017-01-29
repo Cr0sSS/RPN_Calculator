@@ -10,6 +10,6 @@
 
 @interface ErrorController : UIAlertController
 
-+ (ErrorController*)errorControllerWithMessage:(NSString*)message;
++ (void)errorControllerWithTitle:(NSString*)title message:(NSString*)message;
 
 @end

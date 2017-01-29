@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8442ED461E35E656001A8381 /* ErrorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8442ED451E35E656001A8381 /* ErrorController.m */; };
 		8442ED491E35E915001A8381 /* CalculationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8442ED481E35E915001A8381 /* CalculationManager.m */; };
 		844DE8DC1E2E88D4009637C1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 844DE8DB1E2E88D4009637C1 /* main.m */; };
 		844DE8DF1E2E88D4009637C1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 844DE8DE1E2E88D4009637C1 /* AppDelegate.m */; };
@@ -16,6 +15,7 @@
 		844DE8E71E2E88D4009637C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 844DE8E61E2E88D4009637C1 /* Assets.xcassets */; };
 		844DE8EA1E2E88D4009637C1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 844DE8E81E2E88D4009637C1 /* LaunchScreen.storyboard */; };
 		844DE8F51E2E88D5009637C1 /* RPN_CalculatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 844DE8F41E2E88D5009637C1 /* RPN_CalculatorTests.m */; };
+		84FAEF1A1E3DD11100686E4F /* ErrorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FAEF191E3DD11100686E4F /* ErrorController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,8 +29,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8442ED441E35E656001A8381 /* ErrorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorController.h; sourceTree = "<group>"; };
-		8442ED451E35E656001A8381 /* ErrorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorController.m; sourceTree = "<group>"; };
 		8442ED471E35E915001A8381 /* CalculationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculationManager.h; sourceTree = "<group>"; };
 		8442ED481E35E915001A8381 /* CalculationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculationManager.m; sourceTree = "<group>"; };
 		844DE8D71E2E88D4009637C1 /* RPN Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RPN Calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +44,8 @@
 		844DE8F01E2E88D5009637C1 /* RPN CalculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RPN CalculatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		844DE8F41E2E88D5009637C1 /* RPN_CalculatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RPN_CalculatorTests.m; sourceTree = "<group>"; };
 		844DE8F61E2E88D5009637C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84FAEF181E3DD11100686E4F /* ErrorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorController.h; sourceTree = "<group>"; };
+		84FAEF191E3DD11100686E4F /* ErrorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,10 +91,10 @@
 				844DE8DE1E2E88D4009637C1 /* AppDelegate.m */,
 				844DE8E01E2E88D4009637C1 /* ViewController.h */,
 				844DE8E11E2E88D4009637C1 /* ViewController.m */,
+				84FAEF181E3DD11100686E4F /* ErrorController.h */,
+				84FAEF191E3DD11100686E4F /* ErrorController.m */,
 				8442ED471E35E915001A8381 /* CalculationManager.h */,
 				8442ED481E35E915001A8381 /* CalculationManager.m */,
-				8442ED441E35E656001A8381 /* ErrorController.h */,
-				8442ED451E35E656001A8381 /* ErrorController.m */,
 				844DE8E31E2E88D4009637C1 /* Main.storyboard */,
 				844DE8E61E2E88D4009637C1 /* Assets.xcassets */,
 				844DE8E81E2E88D4009637C1 /* LaunchScreen.storyboard */,
@@ -226,7 +226,7 @@
 				844DE8E21E2E88D4009637C1 /* ViewController.m in Sources */,
 				844DE8DF1E2E88D4009637C1 /* AppDelegate.m in Sources */,
 				8442ED491E35E915001A8381 /* CalculationManager.m in Sources */,
-				8442ED461E35E656001A8381 /* ErrorController.m in Sources */,
+				84FAEF1A1E3DD11100686E4F /* ErrorController.m in Sources */,
 				844DE8DC1E2E88D4009637C1 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

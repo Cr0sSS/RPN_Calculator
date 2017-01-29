@@ -13,12 +13,20 @@
 static NSString* const allDigits = @"1234567890";
 static NSString* const dotPointers = @".,";
 
+static NSString* const mathOperators = @"-+*/";
+static NSMutableString* onlySymbols;
+
+
 + (CalculationManager*)sharedManager {
     static CalculationManager* manager = nil;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [CalculationManager new];
+        
+        onlySymbols = [mathOperators mutableCopy];
+        [onlySymbols deleteCharactersInRange:NSMakeRange(0, 1)];
+        [onlySymbols appendString:@"()"];
     });
     
     return manager;
@@ -33,8 +41,6 @@ static NSString* const dotPointers = @".,";
     NSMutableArray* rpnExpressionArray = [self transformToRPN:expressionArray];
     
     double result = [self calculateRPNExpression:rpnExpressionArray];
-    
-    //NSMutableString* formattedExpression = [self stringFromArray:expressionArray];
     NSMutableString* rpnExpressionString = [self stringFromArray:rpnExpressionArray];
     
     NSDictionary* dict = @{@"rpn" : rpnExpressionString,
@@ -113,11 +119,6 @@ static NSString* const dotPointers = @".,";
 
 #pragma mark - Formatters
 
-- (NSString*)stringFromUnichar:(unichar)innerChar {
-    return [NSString stringWithFormat:@"%@", [NSString stringWithCharacters:&innerChar length:1]];
-}
-
-
 - (NSMutableArray*)arrayFromString:(NSString*)expression {
     
     NSMutableArray* resultArray = [NSMutableArray new];
@@ -161,24 +162,6 @@ static NSString* const dotPointers = @".,";
 }
 
 
-- (void)addOperator:(NSString*)symbol toArray:(NSMutableArray*)resultArray symbolsBefore:(NSMutableString*)symbolsBefore {
-    
-    if (symbolsBefore.length) {
-        [resultArray addObject:[self numberFromString:symbolsBefore]];
-    }
-    
-    [resultArray addObject:symbol];
-}
-
-
-- (NSNumber*)numberFromString:(NSString*)symbols {
-    
-    double value = [symbols doubleValue];
-    NSNumber* number = [NSNumber numberWithDouble:value];
-    return number;
-}
-
-
 - (NSMutableArray*)transformToRPN:(NSMutableArray*)expression {
     
     NSMutableArray* outputQueue = [NSMutableArray new];
@@ -199,7 +182,7 @@ static NSString* const dotPointers = @".,";
                     NSInteger maxStep = [stack count];
                     for (NSInteger i = 0; i < maxStep; i++) {
                         NSString* stackObj = [self peekFromStack:stack];
-
+                        
                         if ([@"+-" containsString:tokenString] && [@"*/+-" containsString:stackObj]) {
                             [outputQueue addObject:[self popFromStack:stack]];
                             
@@ -252,6 +235,29 @@ static NSString* const dotPointers = @".,";
     }
     
     return outputQueue;
+}
+
+
+- (NSString*)stringFromUnichar:(unichar)innerChar {
+    return [NSString stringWithFormat:@"%@", [NSString stringWithCharacters:&innerChar length:1]];
+}
+
+
+- (void)addOperator:(NSString*)symbol toArray:(NSMutableArray*)resultArray symbolsBefore:(NSMutableString*)symbolsBefore {
+    
+    if (symbolsBefore.length) {
+        [resultArray addObject:[self numberFromString:symbolsBefore]];
+    }
+    
+    [resultArray addObject:symbol];
+}
+
+
+- (NSNumber*)numberFromString:(NSString*)symbols {
+    
+    double value = [symbols doubleValue];
+    NSNumber* number = [NSNumber numberWithDouble:value];
+    return number;
 }
 
 

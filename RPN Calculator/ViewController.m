@@ -28,8 +28,6 @@
                                              selector:@selector(showErrorMessage:)
                                                  name:@"CalculationError"
                                                object:nil];
-    
-    //self.mainTextField.text = @"1+2*5 - 5/22 + (45 +34)*-3";
 }
 
 
@@ -41,6 +39,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+
+#pragma mark - Actions
 
 - (IBAction)resultButtonPress:(id)sender {
     [self startCalculation];
@@ -55,13 +55,12 @@
 }
 
 
+#pragma mark - Calculation
+
 - (void)startCalculation {
     self.hasError = NO;
     
     NSDictionary* dict = [[CalculationManager sharedManager] calculateExpression:self.mainTextField.text];
-    
-    //NSMutableString* expression = dict[@"expression"];
-    //self.resultLabel.text = self.hasError ? self.resultLabel.text : expression;
 
     NSMutableString* rpnExpression = dict[@"rpn"];
     double result = [dict[@"result"] doubleValue];
@@ -89,16 +88,17 @@
 }
 
 
+#pragma mark - Error
+
 - (void)showErrorMessage:(NSNotification*)notification {
     self.hasError = YES;
 
     NSString* message = [notification userInfo][@"message"];
-    ErrorController* ec = [ErrorController errorControllerWithMessage:message];
-    [self presentViewController:ec animated:YES completion:nil];
+    [ErrorController errorControllerWithTitle:@"Ошибка вычисления" message:message];
 }
 
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - Text Field Delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
