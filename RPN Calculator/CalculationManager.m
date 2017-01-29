@@ -12,10 +12,10 @@
 
 static NSString* const allDigits = @"1234567890";
 static NSString* const dotPointers = @".,";
-
-static NSString* const mathOperators = @"-+*/";
 static NSMutableString* onlySymbols;
 
+// Добавить знак новой операции в конец строки
+static NSString* const mathOperators = @"-+*/";
 
 + (CalculationManager*)sharedManager {
     static CalculationManager* manager = nil;
@@ -75,6 +75,11 @@ static NSMutableString* onlySymbols;
                     }
                     
                     newOper = firstOper / secondOper;
+                
+                /* Добавить реализацию для новой операции
+                } else if ([token isEqual:@"^"]) {
+                    newOper = pow(firstOper, secondOper);
+                */
                     
                 } else {
                     newOper = firstOper * secondOper;
@@ -146,14 +151,14 @@ static NSMutableString* onlySymbols;
                 symbolsBefore = [@"" mutableCopy];
             }
             
-        } else if ([@"+*/()" containsString:symbol]) {
+        } else if ([onlySymbols containsString:symbol]) {
             [self addOperator:symbol toArray:resultArray symbolsBefore:symbolsBefore];
             symbolsBefore = [@"" mutableCopy];
         }
     }
     
     if ([[resultArray lastObject] isKindOfClass:[NSString class]]) {
-        if ([@"+-/*" containsString:[resultArray lastObject]]) {
+        if ([mathOperators containsString:[resultArray lastObject]]) {
             [self postErrorMessage:@"Неверная запись выражения:\nВыражение не может заканчиваться знаком операции"];
         }
     }
@@ -175,7 +180,7 @@ static NSMutableString* onlySymbols;
         } else if ([token isKindOfClass:[NSString class]]) {
             NSString* tokenString = (NSString*)token;
             
-            if ([@"+-*/" containsString:tokenString]) {
+            if ([mathOperators containsString:tokenString]) {
                 
                 if ([stack count]) {
                     
