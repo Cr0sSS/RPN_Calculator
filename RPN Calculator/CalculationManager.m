@@ -12,10 +12,6 @@
 
 static NSString* const allDigits = @"1234567890";
 static NSString* const dotPointers = @".,";
-static NSMutableString* onlySymbols;
-
-// Добавить знак новой операции в конец строки
-static NSString* const mathOperators = @"-+*/^";
 
 + (CalculationManager*)sharedManager {
     static CalculationManager* manager = nil;
@@ -23,10 +19,6 @@ static NSString* const mathOperators = @"-+*/^";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [CalculationManager new];
-        
-        onlySymbols = [mathOperators mutableCopy];
-        [onlySymbols deleteCharactersInRange:NSMakeRange(0, 1)];
-        [onlySymbols appendString:@"()"];
     });
     
     return manager;
@@ -132,6 +124,7 @@ static NSString* const mathOperators = @"-+*/^";
     
     for (NSUInteger i = 0; i < expression.length; i++) {
         NSString* symbol = [self stringFromUnichar:[expression characterAtIndex:i]];
+        NSInteger symbolPriority = [self priorityOfOperator:symbol];
         
         if ([allDigits containsString:symbol]) {
             [symbolsBefore insertString:symbol atIndex:symbolsBefore.length];
@@ -143,23 +136,29 @@ static NSString* const mathOperators = @"-+*/^";
         } else if ([dotPointers containsString:symbol]) {
             [symbolsBefore insertString:@"." atIndex:symbolsBefore.length];
             
-        } else if ([symbol isEqualToString:@"-"]) {
-            if ([symbolsBefore isEqualToString:@""]) {
-                [symbolsBefore insertString:symbol atIndex:symbolsBefore.length];
-                
+        } else if (symbolPriority == 3) {
+            //// Унарный минус
+            if ([symbolsBefore isEqualToString:@""] && ![[resultArray lastObject] isEqualToString:@")"]) {
+                [symbolsBefore appendString:symbol];
+             
+            //// Знак операции "минус"
             } else {
                 [self addOperator:symbol toArray:resultArray symbolsBefore:symbolsBefore];
                 symbolsBefore = [@"" mutableCopy];
             }
             
-        } else if ([onlySymbols containsString:symbol]) {
+        } else if (symbolPriority < INT_MAX) {
+            //// Любой знак, кроме минуса и точки
             [self addOperator:symbol toArray:resultArray symbolsBefore:symbolsBefore];
             symbolsBefore = [@"" mutableCopy];
         }
     }
     
-    if ([[resultArray lastObject] isKindOfClass:[NSString class]]) {
-        if ([mathOperators containsString:[resultArray lastObject]]) {
+    id lastObj = [resultArray lastObject];
+    if ([lastObj isKindOfClass:[NSString class]]) {
+        
+        if ([self priorityOfOperator:lastObj] > 1) {
+            //// Не скобка
             [self postErrorMessage:@"Неверная запись выражения:\nВыражение не может заканчиваться знаком операции"];
         }
     }
@@ -181,8 +180,9 @@ static NSString* const mathOperators = @"-+*/^";
         } else if ([token isKindOfClass:[NSString class]]) {
             NSString* tokenString = (NSString*)token;
             
-            if ([mathOperators containsString:tokenString]) {
-                
+            NSInteger operPriority = [self priorityOfOperator:tokenString];
+            if (operPriority > 1 && operPriority < INT_MAX) {
+                //// Является знаком операции
                 NSInteger count = [stack count];
                 for (NSInteger i = 0; i < count; i++) {
                     NSString* stackString = [self peekFromStack:stack];
