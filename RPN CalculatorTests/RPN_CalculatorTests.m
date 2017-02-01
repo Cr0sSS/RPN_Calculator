@@ -7,6 +7,9 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <OCMock/OCMock.h>
+
+#import "CalculationManager.h"
 
 @interface RPN_CalculatorTests : XCTestCase
 
@@ -16,24 +19,131 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+
+- (void)testDivideByZeroException {
+    TestCalculationManager* manager = [TestCalculationManager new];
+    
+    NSString* notificationName = @"CalculationError";
+    NSString* expectedMessage = @"Деление на ноль невозможно";
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserverForName:notificationName
+     object:nil
+     queue:nil
+     usingBlock:^(NSNotification * _Nonnull note) {
+         
+         NSString* message = note.userInfo[@"message"];
+         XCTAssertEqualObjects(message, expectedMessage);
+     }];
+    
+    NSArray* zeroArray = @[@8, @0, @"/"];
+    double zeroResult = [manager calculateRPNExpression:[zeroArray mutableCopy]];
+    
+    XCTAssertEqual(zeroResult * 2, zeroResult);
+    XCTAssertNotEqual(zeroResult, 0);
+    
+    NSArray* zeroByZeroArray = @[@0, @0, @"/"];
+    double zeroByZeroResult = [manager calculateRPNExpression:[zeroByZeroArray mutableCopy]];
+    
+    XCTAssertNotEqual(zeroByZeroResult, zeroByZeroResult);
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+
+- (void)testUnaryMinus {
+    TestCalculationManager* manager = [TestCalculationManager new];
+    
+    NSDictionary* dict = [manager calculateExpression:@"8--3"];
+    double result = [dict[@"result"] doubleValue];
+    
+    XCTAssertEqual(result, 11.f);
+    
+    NSDictionary* bracketsDict = [manager calculateExpression:@"8--3"];
+    double resultInBrackets = [bracketsDict[@"result"] doubleValue];
+    
+    XCTAssertEqual(resultInBrackets, 11.f);
+}
+
+
+- (void)testUnaryMinusAfterBrackets {
+    TestCalculationManager* manager = [TestCalculationManager new];
+    
+    NSDictionary* firstDict = [manager calculateExpression:@"(11+2)-3"];
+    double firstResult = [firstDict[@"result"] doubleValue];
+    
+    XCTAssertEqual(firstResult, 10.f);
+    
+    NSDictionary* secondDict = [manager calculateExpression:@"(11+2)--3"];
+    double secondResult = [secondDict[@"result"] doubleValue];
+    
+    XCTAssertEqual(secondResult, 16.f);
+    
+    NSDictionary* thirdDict = [manager calculateExpression:@"(9+3)/-4"];
+    double thirdResult = [thirdDict[@"result"] doubleValue];
+    
+    XCTAssertEqual(thirdResult, -3.f);
+}
+
+
+- (void)testLastSymbolOperator {
+    TestCalculationManager* manager = [TestCalculationManager new];
+    
+    NSString* notificationName = @"CalculationError";
+    
+    NSString* countsMessage = @"Неверная запись выражения:\nПроверьте количество операндов и знаков операций";
+    NSString* lastSymbolMessage = @"Неверная запись выражения:\nВыражение не может заканчиваться знаком операции";
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserverForName:notificationName
+     object:nil
+     queue:nil
+     usingBlock:^(NSNotification * _Nonnull note) {
+         
+         NSString* message = note.userInfo[@"message"];
+         
+         if (![message isEqualToString:countsMessage] && ![message isEqualToString:lastSymbolMessage]) {
+             XCTFail();
+         }
+     }];
+    
+    [manager calculateExpression:@"4+2-"];
+}
+
+
+- (void)testFloatFromDotPointers {
+    TestCalculationManager* manager = [TestCalculationManager new];
+    
+    NSDictionary* firstDict = [manager calculateExpression:@"4.25+2"];
+    double firstResult = [firstDict[@"result"] doubleValue];
+    
+    XCTAssertEqualWithAccuracy(firstResult, 6.25f, 0.001f);
+    
+    NSDictionary* secondDict = [manager calculateExpression:@"8,55-3"];
+    double secondResult = [secondDict[@"result"] doubleValue];
+    
+    XCTAssertEqualWithAccuracy(secondResult, 5.55f, 0.001f);
+}
+
+
+- (void)testPriority {
+    TestCalculationManager* manager = [TestCalculationManager new];
+    
+    NSDictionary* firstDict = [manager calculateExpression:@"8*(1+5)-6/3"];
+    double firstResult = [firstDict[@"result"] doubleValue];
+    
+    XCTAssertEqual(firstResult, 46.f);
+    
+    /*
+    NSDictionary* secondDict = [manager calculateExpression:@"8-3^2*5+50/5^2"];
+    double secondResult = [secondDict[@"result"] doubleValue];
+    
+    XCTAssertEqual(secondResult, -35.f);
+    */
 }
 
 @end

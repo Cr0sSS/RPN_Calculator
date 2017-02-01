@@ -323,3 +323,12 @@ static NSString* const dotPointers = @".,";
 }
 
 @end
+
+
+@implementation TestCalculationManager
+
+- (double)calculateRPNExpression:(NSMutableArray*)rpnExpressionArray {
+    return [super calculateRPNExpression:rpnExpressionArray];
+}
+
+@end

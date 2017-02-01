@@ -15,3 +15,12 @@
 - (NSDictionary*)calculateExpression:(NSString*)expression;
 
 @end
+
+
+@interface TestCalculationManager : CalculationManager
+
+- (double)calculateRPNExpression:(NSMutableArray*)rpnExpressionArray;
+
+
+
+@end
