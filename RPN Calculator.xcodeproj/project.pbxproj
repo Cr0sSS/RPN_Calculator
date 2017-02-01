@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		843CA7CD1E410BA000FB742D /* OCMock in Resources */ = {isa = PBXBuildFile; fileRef = 843CA7CC1E410BA000FB742D /* OCMock */; };
-		843CA7CE1E410BA000FB742D /* OCMock in Resources */ = {isa = PBXBuildFile; fileRef = 843CA7CC1E410BA000FB742D /* OCMock */; };
+		843CA7D31E412D6C00FB742D /* usr in Resources */ = {isa = PBXBuildFile; fileRef = 843CA7D21E412D6C00FB742D /* usr */; };
+		843CA7D81E41C6FE00FB742D /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CA7D71E41C6FE00FB742D /* libOCMock.a */; };
+		843CA7D91E41C71B00FB742D /* CalculationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8442ED481E35E915001A8381 /* CalculationManager.m */; };
 		8442ED491E35E915001A8381 /* CalculationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8442ED481E35E915001A8381 /* CalculationManager.m */; };
 		844DE8DC1E2E88D4009637C1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 844DE8DB1E2E88D4009637C1 /* main.m */; };
 		844DE8DF1E2E88D4009637C1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 844DE8DE1E2E88D4009637C1 /* AppDelegate.m */; };
@@ -31,7 +32,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		843CA7CC1E410BA000FB742D /* OCMock */ = {isa = PBXFileReference; lastKnownFileType = folder; path = OCMock; sourceTree = "<group>"; };
+		843CA7D21E412D6C00FB742D /* usr */ = {isa = PBXFileReference; lastKnownFileType = folder; path = usr; sourceTree = "<group>"; };
+		843CA7D51E412D7F00FB742D /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOCMock.a; path = usr/lib/libOCMock.a; sourceTree = "<group>"; };
+		843CA7D71E41C6FE00FB742D /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOCMock.a; path = OCMock/libOCMock.a; sourceTree = "<group>"; };
 		8442ED471E35E915001A8381 /* CalculationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculationManager.h; sourceTree = "<group>"; };
 		8442ED481E35E915001A8381 /* CalculationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculationManager.m; sourceTree = "<group>"; };
 		844DE8D71E2E88D4009637C1 /* RPN Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RPN Calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,19 +66,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				843CA7D81E41C6FE00FB742D /* libOCMock.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		843CA7D41E412D7E00FB742D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				843CA7D71E41C6FE00FB742D /* libOCMock.a */,
+				843CA7D51E412D7F00FB742D /* libOCMock.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		844DE8CE1E2E88D3009637C1 = {
 			isa = PBXGroup;
 			children = (
 				844DE8D91E2E88D4009637C1 /* RPN Calculator */,
 				844DE8F31E2E88D5009637C1 /* RPN CalculatorTests */,
 				844DE8D81E2E88D4009637C1 /* Products */,
-				843CA7CC1E410BA000FB742D /* OCMock */,
+				843CA7D21E412D6C00FB742D /* usr */,
+				843CA7D41E412D7E00FB742D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -209,7 +223,6 @@
 			files = (
 				844DE8EA1E2E88D4009637C1 /* LaunchScreen.storyboard in Resources */,
 				844DE8E71E2E88D4009637C1 /* Assets.xcassets in Resources */,
-				843CA7CD1E410BA000FB742D /* OCMock in Resources */,
 				844DE8E51E2E88D4009637C1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -218,7 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				843CA7CE1E410BA000FB742D /* OCMock in Resources */,
+				843CA7D31E412D6C00FB742D /* usr in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				844DE8F51E2E88D5009637C1 /* RPN_CalculatorTests.m in Sources */,
+				843CA7D91E41C71B00FB742D /* CalculationManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,11 +407,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/OCMock/OCMock";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/usr/include";
 				INFOPLIST_FILE = "RPN CalculatorTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/usr/lib",
 					"$(PROJECT_DIR)/OCMock",
 				);
 				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
@@ -411,11 +426,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/OCMock/OCMock";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/usr/include";
 				INFOPLIST_FILE = "RPN CalculatorTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/usr/lib",
 					"$(PROJECT_DIR)/OCMock",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crxmx.RPN-CalculatorTests";
